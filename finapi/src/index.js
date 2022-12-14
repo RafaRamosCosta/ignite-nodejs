@@ -50,6 +50,16 @@ function verifyIfCustomerExists(req, res, next) {
   return next();
 }
 
+function getBalance(statement) {
+  const balance = statement.reduce((balance, operation) => {
+    return operation.type === "credit"
+      ? balance + operation.amount
+      : balance - operation.amount;
+  }, 0);
+
+  return balance;
+}
+
 app.post("/deposit", verifyIfCustomerExists, (req, res) => {
   const { description, amount } = req.body;
 
@@ -67,11 +77,51 @@ app.post("/deposit", verifyIfCustomerExists, (req, res) => {
   return res.status(201).send(customer.statement);
 });
 
+app.post("/withdraw", verifyIfCustomerExists, (req, res) => {
+  const { amount } = req.body;
+
+  const { customer } = req;
+
+  const balance = getBalance(customer.statement);
+
+  if (balance < amount)
+    return res.status(405).json({
+      status: 405,
+      message: "Insufficient balance!",
+      error: "Method not allowed!",
+    });
+
+  const statementOperation = {
+    amount,
+    createdAt: new Date(),
+    type: "debit",
+  };
+
+  customer.statement.push(statementOperation);
+
+  return res.status(201).send(customer.statement);
+});
+
 // app.use(verifyIfCustomerExists);
 
 app.get("/statement", verifyIfCustomerExists, (req, res) => {
   const { customer } = req;
   return res.json(customer.statement);
+});
+
+app.get("/statement/date", verifyIfCustomerExists, (req, res) => {
+  const { customer } = req;
+
+  const { date } = req.query;
+
+  const dateFormat = new Date(date + " 00:00");
+
+  const statement = customer.statement.filter(
+    (statement) =>
+      statement.createdAt.toDateString() === new Date(dateFormat).toDateString()
+  );
+
+  return res.json(statement);
 });
 
 app.listen(3333);
