@@ -7,27 +7,6 @@ app.use(express.json());
 
 const customers = [];
 
-// middleware
-function verifyIfExistsAccountCPF(req, res, next) {
-  const { cpf } = req.headers;
-
-  const customer = customers.find(
-    (customer) => customer.cpf === cpf
-  );
-
-  if (!customer) {
-    return res.status(400).json({
-      status: 400,
-      message: "Customer not found!",
-      error: "Bad request",
-    });
-  }
-
-  req.customer = customer;
-
-  return next();
-}
-
 app.post("/account", (req, res) => {
   const { cpf, name } = req.body;
 
@@ -52,9 +31,45 @@ app.post("/account", (req, res) => {
   return res.status(201).send(customers);
 });
 
-// app.use(verifyIfExistsAccountCPF);
+// middleware
+function verifyIfCustomerExists(req, res, next) {
+  const { cpf } = req.headers;
 
-app.get("/statement", verifyIfExistsAccountCPF, (req, res) => {
+  const customer = customers.find((customer) => customer.cpf === cpf);
+
+  if (!customer) {
+    return res.status(400).json({
+      status: 400,
+      message: "Customer not found!",
+      error: "Bad request",
+    });
+  }
+
+  req.customer = customer;
+
+  return next();
+}
+
+app.post("/deposit", verifyIfCustomerExists, (req, res) => {
+  const { description, amount } = req.body;
+
+  const { customer } = req;
+
+  const statementOperation = {
+    description,
+    amount,
+    createdAt: new Date(),
+    type: "credit",
+  };
+
+  customer.statement.push(statementOperation);
+
+  return res.status(201).send(customer.statement);
+});
+
+// app.use(verifyIfCustomerExists);
+
+app.get("/statement", verifyIfCustomerExists, (req, res) => {
   const { customer } = req;
   return res.json(customer.statement);
 });
