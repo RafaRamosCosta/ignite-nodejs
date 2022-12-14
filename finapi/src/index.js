@@ -124,4 +124,36 @@ app.get("/statement/date", verifyIfCustomerExists, (req, res) => {
   return res.json(statement);
 });
 
+app.get("/account", verifyIfCustomerExists, (req, res) => {
+  const { customer } = req;
+
+  return res.json(customer);
+});
+
+app.get("/balance", verifyIfCustomerExists, (req, res) => {
+  const { customer } = req;
+
+  const balance = getBalance(customer.statement);
+
+  return res.json({ balance });
+});
+
+app.put("/account", verifyIfCustomerExists, (req, res) => {
+  const { name } = req.body;
+
+  const { customer } = req;
+
+  customer.name = name;
+
+  return res.status(201).send(customer);
+});
+
+app.delete("/account", verifyIfCustomerExists, (req, res) => {
+  const { customer } = req;
+
+  customers.splice(customer, 1);
+
+  return res.status(200).json(customers);
+});
+
 app.listen(3333);
