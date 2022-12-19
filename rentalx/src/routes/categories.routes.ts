@@ -9,8 +9,8 @@ categoriesRoutes.post("/", (req, res) =>
   createCategoryController.handle(req, res)
 );
 
-categoriesRoutes.get("/", (req, res) => {
-  return listCategoriesController.handle(req, res);
-});
+categoriesRoutes.get("/", (req, res) =>
+  listCategoriesController.handle(req, res)
+);
 
 export { categoriesRoutes };
