@@ -14,20 +14,20 @@ interface IRequest {
   category_id: string;
 }
 
-// @injectable()
+@injectable()
 export class CreateCarUseCase {
   constructor(
-    // @inject("CarsRepository")
+    @inject("CarsRepository")
     private carsRepository: ICarsRepository
   ) {}
 
   async execute({
     name,
+    brand,
     description,
     daily_rate,
-    license_plate,
     fine_amount,
-    brand,
+    license_plate,
     category_id,
   }: IRequest): Promise<Car> {
     const carAlreadyExists = await this.carsRepository.findByLicensePlate(
@@ -38,11 +38,11 @@ export class CreateCarUseCase {
 
     const car = await this.carsRepository.create({
       name,
+      brand,
       description,
       daily_rate,
-      license_plate,
       fine_amount,
-      brand,
+      license_plate,
       category_id,
     });
     return car;
