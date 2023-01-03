@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 
+import { InMemoryCarsRepository } from "@modules/cars/repositories/in-memory/InMemoryCarsRepository";
 import { InMemoryRentalsRepository } from "@modules/rentals/repositories/in-memory/InMemoryRentalsRepository";
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider";
 import { AppError } from "@shared/errors/AppError";
@@ -9,15 +10,18 @@ import { CreateRentalUseCase } from "./CreateRentalUseCase";
 describe("Create Rental", () => {
   const plusOneDay = dayjs().add(1, "day").toDate();
   let inMemoryRentalsRepository: InMemoryRentalsRepository;
+  let inMemoryCarsRepository: InMemoryCarsRepository;
   let dayJsDateProvider: DayjsDateProvider;
   let createRentalUseCase: CreateRentalUseCase;
 
   beforeEach(() => {
     inMemoryRentalsRepository = new InMemoryRentalsRepository();
+    inMemoryCarsRepository = new InMemoryCarsRepository();
     dayJsDateProvider = new DayjsDateProvider();
     createRentalUseCase = new CreateRentalUseCase(
       inMemoryRentalsRepository,
-      dayJsDateProvider
+      dayJsDateProvider,
+      inMemoryCarsRepository
     );
   });
 
