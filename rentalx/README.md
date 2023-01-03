@@ -70,7 +70,6 @@
 > - Não deve ser possível cadastrar um novo aluguel para um carro que já está alugado;
 > - Ao realizar um aluguel o status do carro deverá ser alterado para indisponível.
 
-
 ## Devolução de carros
 
 **RF**
@@ -79,6 +78,7 @@
 
 **RN**
 
+> - O usuário deve estar logado;
 > - Se o carro for devolvido em menos de 24 horas, deverá ser cobrado a diária completa;
 > - Ao realizar a devolução, o carro deverá ser liberado para outro aluguel;
 > - Ao realizar a devolução, deverá ser calculado o total do aluguel;
