@@ -84,3 +84,13 @@
 > - Ao realizar a devolução, deverá ser calculado o total do aluguel;
 > - Se o carro for devolvido após o horário previsto de entrega, deverá ser cobrado multa proporcional ao período de atraso;
 > - Caso haja multa, deverá ser somada ao total do aluguel.
+
+## Listagem de Alugueis para usuário
+
+**RF**
+
+> - Deve ser possível realizar a busca de todos os aluguéis para o usuário.
+
+**RN**
+
+> - O usuário deve estar logado na aplicação.
