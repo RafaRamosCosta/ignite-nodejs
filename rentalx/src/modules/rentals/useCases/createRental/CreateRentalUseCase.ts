@@ -49,7 +49,7 @@ export class CreateRentalUseCase {
     );
 
     if (compare < minRentalHour)
-      throw new AppError("A rental must have at least a 24 hour duration");
+      throw new AppError("A rental must have at least a 24 hour duration!");
 
     const rental = await this.rentalsRepository.create({
       user_id,

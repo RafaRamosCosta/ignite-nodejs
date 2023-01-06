@@ -34,7 +34,7 @@ export class CreateCarUseCase {
       license_plate
     );
 
-    if (carAlreadyExists) throw new AppError("Car already exists");
+    if (carAlreadyExists) throw new AppError("Car already exists!");
 
     const car = await this.carsRepository.create({
       name,
