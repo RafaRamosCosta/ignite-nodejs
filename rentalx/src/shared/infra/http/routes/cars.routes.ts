@@ -30,7 +30,7 @@ carsRoutes.post(
   createCarSpecificationController.handle
 );
 
-const upload = multer(uploadConfig.upload("./tmp/cars"));
+const upload = multer(uploadConfig);
 
 const uploadCarImagesController = new UploadCarImagesController();
 carsRoutes.post(
